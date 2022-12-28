@@ -2,12 +2,12 @@
 
 ## Description
 
-**Open a fake Free WiFi with the M5StickC PLUS and phish emails and possible passwords:\** 
+**Open a fake Free WiFi with the M5StickC PLUS and phish emails and possible passwords:**\
 You can change the SSID over the Server.\
 The email addresses and passwords are stored in the EEPROM.\
 With the Button A you refresh the local available WiFi's and shut down the AP.\
 With the Button B you activate the AP.\
-With the other sidebutton from the M5StickCPlus you can turn off and turn on the M5StickCPlus.\
+With the other sidebutton from the M5StickCPlus you can turn off and turn on the M5StickCPlus.
 
 **To implement the M5CStickCPlus to the Arduino IDE:**
 1. Open the IDE
