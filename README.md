@@ -1,4 +1,4 @@
-<img src="D:\Desktop\Projekte\M5SitckCPlus\WiFiScam\M5.png" alt="M5StickC" width="350">
+<img src="https://github.com/Schury1998/WiFiScam-CaptivePortal-M5StickCPlus/M5.png" alt="M5StickC" width="350">
 
 ## Description
 
