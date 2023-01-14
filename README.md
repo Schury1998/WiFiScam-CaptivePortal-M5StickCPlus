@@ -6,7 +6,7 @@
 You can change the SSID over the Server. 
 The email addresses and passwords are stored in the EEPROM.
 With the Button A you refresh the local available WiFi's and shut down the AP.
-With the Button B you activate the AP.
+With the Button B you activate the AP. A second click on the Button B turns off the Display to save energy. You can turn on the display with clicking the Button B again or press Button A (If you use the A Button, the available networkscan is trigger again)
 With the other sidebutton from the M5StickCPlus you can turn off and turn on the M5StickCPlus.
 
 **To implement the M5CStickCPlus to the Arduino IDE:**

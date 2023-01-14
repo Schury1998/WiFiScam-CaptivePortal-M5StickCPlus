@@ -1,4 +1,4 @@
-#include <M5StickCPlus.h>
+#include <M5StickCPlus.h> //http://docs.m5stack.com/en/api/stickc/lcd_m5stickc
 #include <WiFi.h>
 #include <EEPROM.h>
 #include <WebServer.h>
@@ -36,7 +36,7 @@ int initialCheckLocation = 20; // Location to check whether the ESP is running f
 int passStart = 30;            // Starting location in EEPROM to save password.
 int passEnd = passStart;       // Ending location in EEPROM to save password.
 
-unsigned long bootTime=0, lastActivity=0, lastTick=0, tickCtr=0;
+unsigned long bootTime=0, lastActivity=0, lastTick=0, tickCtr=0, buttonBcout=0;
 
 String input(String argName) {
   String a = webServer.arg(argName);
@@ -146,9 +146,19 @@ int scanNetworks() {
   IPAddress ip(192, 168, 0, 50); 
   WiFi.softAPConfig(ip, ip, IPAddress(255, 255, 255, 0));
   WiFi.mode(WIFI_STA);  
-
+  LCD_Clear();
+  M5.Lcd.setCursor(10, 45);
+  M5.Lcd.setTextSize(3);  
+  M5.Axp.ScreenSwitch(1);
+  M5.Lcd.setTextColor(BLUE);
+  M5.Lcd.printf("Scanning...");
+  M5.Lcd.setCursor(70, 85);
+  M5.Lcd.setTextSize(1);  
+  M5.Lcd.printf("Please wait...");
+  M5.Lcd.setTextSize(2); 
   // WiFi.scanNetworks will return the number of networks found.
     int n = WiFi.scanNetworks();
+    LCD_Clear();
     if (n == 0) {
         M5.Lcd.printf("no Networks found");
     } else {
@@ -249,7 +259,6 @@ void printServerInit()
 void battery_status()
 {
   double vbat = M5.Axp.GetVbatData() * 1.1 / 1000;
-  int discharge = M5.Axp.GetIdischargeData() / 2;
   if (vbat >= 4)
   {
     M5.Lcd.pushImage(227, 1, 14, 8, bat_3);
@@ -266,11 +275,13 @@ void battery_status()
 
 void setup()
 {
-  M5.begin();  // Initialize M5StickC Plus.  
+  M5.begin();  // Initialize M5StickC Plus. 
+  M5.Axp.ScreenBreath(7);   
   M5.Lcd.setTextSize(2);  // Set font size.
   M5.Lcd.setRotation(3);  // Rotate the screen.
-
+  buttonBcout=0;  
   scanNetworks();
+  M5.Axp.ScreenBreath(12);
   WiFi.setHostname(hostname.c_str());
   pinMode(10, OUTPUT);
   digitalWrite(10, HIGH);
@@ -322,15 +333,19 @@ void loop()
 {
     M5.update();  // Read the press state of the key.
     battery_status(); 
-    if (M5.BtnA.wasReleased()) {  // If the button A is pressed.  
-        LCD_Clear();
+    if (M5.BtnA.wasPressed()) {  // If the button A is pressed. 
+        
         scanNetworks();
+        buttonBcout=0; 
     }
-    if (M5.BtnB.wasReleased()) {  // If the button B is pressed.
-        if (WiFi.softAPIP() != apIP){ //Um bei initialisierten Server eine erneute Initialisierung zu verhindern
+    if (M5.BtnB.wasPressed()) {  // If the button B is pressed.
+        ++buttonBcout;
+        if (WiFi.softAPIP() != apIP && buttonBcout==1){ //Um bei initialisierten Server eine erneute Initialisierung zu verhindern
           openServer();
           printServerInit();
         } 
+        if(buttonBcout%2==0 && buttonBcout!=1) M5.Axp.ScreenSwitch(0);
+        else if(buttonBcout%2!=0 && buttonBcout!=1) M5.Axp.ScreenSwitch(1); 
     }
     
     if ((millis() - lastTick) > TICK_TIMER){
