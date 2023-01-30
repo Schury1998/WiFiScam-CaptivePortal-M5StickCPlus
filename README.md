@@ -1,4 +1,4 @@
-CAN-M5Atom.JPG
+M5.png
 
 ## Description
 **Open a fake Free WiFi with the M5StickC PLUS and phish emails and possible passwords:** 
